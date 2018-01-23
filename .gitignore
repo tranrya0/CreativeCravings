@@ -1,0 +1,8 @@
+.vs
+packages/
+CreativeCravings/bin
+CreativeCravings/obj
+CreativeCravings.Tests/bin
+CreativeCravings.Tests/obj
+CreativeCravings/App_Data
+
