@@ -13,14 +13,14 @@ namespace CreativeCravings.DAL
         {
             var recipes = new List<Recipe>
             {
-            new Recipe{Name="Apple Pie",Category=Category.Breakfast,},
-            new Recipe{Name="Steak and Cheesy Mashed Potatoes",Category=Category.Breakfast,},
-            new Recipe{Name="Roasted Chicken and Rosemary Vegetables",Category=Category.Breakfast},
-            new Recipe{Name="Gyro",Category=Category.Breakfast},
-            new Recipe{Name="Baked Yams",Category=Category.Breakfast},
-            new Recipe{Name="Baked Alaska",Category=Category.Breakfast},
-            new Recipe{Name="Chicken Noodle Soup",Category=Category.Breakfast},
-            new Recipe{Name="Garlic Bread",Category=Category.Breakfast}
+            new Recipe{Name="Apple Pie",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Steak and Cheesy Mashed Potatoes",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Roasted Chicken and Rosemary Vegetables",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Gyro",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Baked Yams",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Baked Alaska",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Chicken Noodle Soup",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Garlic Bread",Category=Category.Breakfast, DateCreated=System.DateTime.Now}
             };
 
             recipes.ForEach(s => context.Recipes.Add(s));
