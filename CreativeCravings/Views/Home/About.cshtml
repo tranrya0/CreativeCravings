@@ -1,7 +1,30 @@
-﻿@{
-    ViewBag.Title = "About";
-}
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+﻿@model IEnumerable<CreativeCravings.ViewModels.RecipeCategoryGroup>
 
-<p>Use this area to provide additional information.</p>
+@{
+    ViewBag.Title = "Recipe Category Statistics";
+}
+
+<h2>Recipe Category Statistics</h2>
+
+<table>
+    <tr>
+        <th>
+            Category
+        </th>
+        <th>
+            Num of Recipes
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryType)
+            </td>
+            <td>
+                @item.RecipeCount
+            </td>
+        </tr>
+    }
+</table>

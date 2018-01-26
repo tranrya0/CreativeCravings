@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CreativeCravings.DAL;
 using CreativeCravings.Models;
+using PagedList;
 
 namespace CreativeCravings.Controllers
 {
@@ -16,8 +17,10 @@ namespace CreativeCravings.Controllers
         private RecipeContext db = new RecipeContext();
 
         // GET: Recipes
-        public ActionResult Index(string sortOrder, string searchString)
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+
             // sorting columns, display opposite of current order, else display default order if nothing is selected for the column
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
@@ -25,8 +28,20 @@ namespace CreativeCravings.Controllers
             var recipes = from s in db.Recipes
                            select s;
 
+            // set pagination page to 1 if search string has a value
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             // search string
-            if (!string.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 recipes = recipes.Where(r => r.Name.Contains(searchString));
                     // example of multiple queries
@@ -57,7 +72,9 @@ namespace CreativeCravings.Controllers
                     recipes = recipes.OrderBy(s => s.Name);
                     break;
             }
-            return View(recipes.ToList());
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(recipes.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Recipes/Details/5
