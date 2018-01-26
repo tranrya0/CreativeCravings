@@ -5,7 +5,7 @@
 }
 
 <h2>Delete</h2>
-
+<p class="error">@ViewBag.ErrorMessage</p>
 <h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>Recipe</h4>
@@ -45,7 +45,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

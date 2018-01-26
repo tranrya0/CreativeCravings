@@ -120,17 +120,24 @@ namespace CreativeCravings.Controllers
         }
 
         // GET: Recipes/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, bool? saveChangesError=false)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system adminstrator.";
+            }
+
             Recipe recipe = db.Recipes.Find(id);
             if (recipe == null)
             {
                 return HttpNotFound();
             }
+
             return View(recipe);
         }
 
@@ -139,9 +146,17 @@ namespace CreativeCravings.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Recipe recipe = db.Recipes.Find(id);
-            db.Recipes.Remove(recipe);
-            db.SaveChanges();
+            try
+            {
+                Recipe recipe = db.Recipes.Find(id);
+                db.Recipes.Remove(recipe);
+                db.SaveChanges();
+            }
+            catch (DataException dex)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+            }
             return RedirectToAction("Index");
         }
 
