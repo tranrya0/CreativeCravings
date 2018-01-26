@@ -16,9 +16,48 @@ namespace CreativeCravings.Controllers
         private RecipeContext db = new RecipeContext();
 
         // GET: Recipes
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string searchString)
         {
-            return View(db.Recipes.ToList());
+            // sorting columns, display opposite of current order, else display default order if nothing is selected for the column
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.CategorySortParam = sortOrder == "Category" ? "category_desc" : "Category";
+            var recipes = from s in db.Recipes
+                           select s;
+
+            // search string
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                recipes = recipes.Where(r => r.Name.Contains(searchString));
+                    // example of multiple queries
+                    /**
+                     *  
+                     students = students.Where(s => s.LastName.Contains(searchString)
+                               || s.FirstMidName.Contains(searchString));
+                     */
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    recipes = recipes.OrderByDescending(s => s.Name);
+                    break;
+                case "Date":
+                    recipes = recipes.OrderBy(s => s.DateCreated);
+                    break;
+                case "date_desc":
+                    recipes = recipes.OrderByDescending(s => s.DateCreated);
+                    break;
+                case "Category":
+                    recipes = recipes.OrderBy(s => s.Category);
+                    break;
+                case "category_desc":
+                    recipes = recipes.OrderByDescending(s => s.Category);
+                    break;
+                default:
+                    recipes = recipes.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(recipes.ToList());
         }
 
         // GET: Recipes/Details/5
