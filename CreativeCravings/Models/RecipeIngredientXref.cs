@@ -5,6 +5,7 @@ using System.Web;
 
 namespace CreativeCravings.Models
 {
+
     public class RecipeIngredientXref
     {
 
@@ -15,5 +16,14 @@ namespace CreativeCravings.Models
         public float Quantity { get; set; }
         public virtual Recipe Recipe { get; set; }
         public virtual Ingredient Ingredient { get; set; }
+
+        // helper property to calculate Quantity + QuantityType as string
+        public string QuantityDisplayString
+        {
+            get
+            {
+                return Quantity + " " + QuantityType;
+            }
+        }
     }
 }
