@@ -47,14 +47,24 @@ namespace CreativeCravings.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Category,DateCreated,DateUpdated")] Recipe recipe)
+        public ActionResult Create([Bind(Include = "Name,Category")] Recipe recipe)
         {
-            if (ModelState.IsValid)
+            recipe.DateCreated = System.DateTime.Now;
+            try
             {
-                db.Recipes.Add(recipe);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Recipes.Add(recipe);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
+            catch (DataException dex)
+            {
+                // log error here
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+
 
             return View(recipe);
         }
@@ -77,17 +87,36 @@ namespace CreativeCravings.Controllers
         // POST: Recipes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Category,DateCreated,DateUpdated")] Recipe recipe)
+        public ActionResult EditRecipe(int? id)
         {
-            if (ModelState.IsValid)
+            if(id == null)
             {
-                db.Entry(recipe).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(recipe);
+
+            Recipe recipeToUpdate = db.Recipes.Find(id);
+
+            if(TryUpdateModel(recipeToUpdate, "",
+                new string[] { "Name", "Category"}))
+            {
+                try
+                {
+                    recipeToUpdate.DateUpdated = System.DateTime.Now;
+                    db.Entry(recipeToUpdate).State = EntityState.Modified;
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (DataException dex)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", dex.Message);
+                }
+            }
+
+            return View(recipeToUpdate);
         }
 
         // GET: Recipes/Delete/5
