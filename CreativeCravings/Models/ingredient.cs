@@ -1,12 +1,15 @@
-﻿namespace CreativeCravings.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace CreativeCravings.Models
 {
     public class Ingredient
     {
         public int ID { get; set; }
-        public int RecipeID { get; set; }
         public string Name { get; set; }
-        public float Quantity { get; set; }
 
-        public virtual Recipe Recipe { get; set; }
+        public virtual ICollection<RecipeIngredientXref> RecipeIngredientXrefs { get; set; }
     }
 }

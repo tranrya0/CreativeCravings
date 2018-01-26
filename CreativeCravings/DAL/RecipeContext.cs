@@ -18,6 +18,7 @@ namespace CreativeCravings.DAL
         // each DbSet corresponds to a database table
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RecipeIngredientXref> RecipeIngredientXrefs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
