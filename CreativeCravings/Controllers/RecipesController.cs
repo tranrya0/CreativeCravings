@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using CreativeCravings.DAL;
 using CreativeCravings.Models;
 using PagedList;
+using System.Data.Entity.Infrastructure;
 
 namespace CreativeCravings.Controllers
 {
@@ -115,7 +116,7 @@ namespace CreativeCravings.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException dex)
+            catch (RetryLimitExceededException dex)
             {
                 // log error here
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
@@ -165,7 +166,7 @@ namespace CreativeCravings.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                catch (DataException dex)
+                catch (RetryLimitExceededException dex)
                 {
                     //Log the error (uncomment dex variable name and add a line here to write a log.
                     ModelState.AddModelError("", dex.Message);
@@ -208,7 +209,7 @@ namespace CreativeCravings.Controllers
                 db.Recipes.Remove(recipe);
                 db.SaveChanges();
             }
-            catch (DataException dex)
+            catch (RetryLimitExceededException dex)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });

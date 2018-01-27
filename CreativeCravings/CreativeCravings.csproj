@@ -199,11 +199,16 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RecipesController.cs" />
+    <Compile Include="DAL\RecipeConfigurations.cs" />
     <Compile Include="DAL\RecipeContext.cs" />
     <Compile Include="DAL\RecipeInitializer.cs" />
+    <Compile Include="DAL\RecipeInterceptorLogging.cs" />
+    <Compile Include="DAL\RecipeInterceptorTransientErrors.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Ingredient.cs" />
