@@ -18,14 +18,20 @@ namespace CreativeCravings.Migrations
         {
             var recipes = new List<Recipe>
             {
-            new Recipe{Name="Apple Pie",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Steak and Cheesy Mashed Potatoes",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Roasted Chicken and Rosemary Vegetables",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Gyro",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Baked Yams",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Baked Alaska",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Chicken Noodle Soup",Category=Category.Breakfast, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Garlic Bread",Category=Category.Breakfast, DateCreated=System.DateTime.Now}
+            new Recipe{Name="Apple Pie",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
+                Description="A pie with apple filling"},
+            new Recipe{Name="Steak and Cheesy Mashed Potatoes",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
+                Description="Steak with a side of cheesey mashed potatoes"},
+            new Recipe{Name="Roasted Chicken and Rosemary Vegetables",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
+                Description="Roasted chicken, topped with garlic, pepper, rosemary, and a side of vegetables"},
+            new Recipe{Name="Gyro",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
+                Description="Classic Gyro, filled with pork or chicken, tomatom, onions, and tzatziki sauce"},
+            new Recipe{Name="Baked Yams",Category=Category.Dessert, DateCreated=System.DateTime.Now,
+                Description="Baked Yams, topped with sour cream. Can substitute sweet potatoes"},
+            new Recipe{Name="Baked Alaska",Category=Category.Dessert, DateCreated=System.DateTime.Now,
+                Description="Dessert consisting of ice cream and cake, topped with browned meringue"},
+            new Recipe{Name="Chicken Noodle Soup",Category=Category.Lunch, DateCreated=System.DateTime.Now},
+            new Recipe{Name="Garlic Bread",Category=Category.Lunch, DateCreated=System.DateTime.Now}
             };
             recipes.ForEach(s => context.Recipes.AddOrUpdate(p => p.Name, s));
             context.SaveChanges();
