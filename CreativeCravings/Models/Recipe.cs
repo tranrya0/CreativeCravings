@@ -20,8 +20,11 @@ namespace CreativeCravings.Models
         public string Name { get; set; }
 
         public Category? Category { get; set; }
-        
+
+        [Display(Name = "Date Created")]
         public DateTime? DateCreated { get; set; }
+
+        [Display(Name = "Date Updated")]
         public DateTime? DateUpdated { get; set; }
 
         [StringLength(250, ErrorMessage = "Recipe description must not exceed 250 characters")]
