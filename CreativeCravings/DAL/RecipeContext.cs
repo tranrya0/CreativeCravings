@@ -24,6 +24,15 @@ namespace CreativeCravings.DAL
         {
             // prevent tables from being pluralized
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            // many to many relationship mapping
+            /**
+            modelBuilder.Entity<Recipe>()
+                .HasMany(c => c.RecipeIngredientXrefs).WithMany(i => i.Ingredients)
+                .Map(t => t.MapLeftKey("CourseID")
+                    .MapRightKey("InstructorID")
+                    .ToTable("CourseInstructor"));
+            */
         }
     }
 }

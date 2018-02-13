@@ -19,6 +19,7 @@ namespace CreativeCravings.Models
         [Required, StringLength(200, MinimumLength = 2, ErrorMessage = "Recipe name must be betwee 2-200 characters")]
         public string Name { get; set; }
 
+        [DisplayFormat(NullDisplayText = "Unassigned")]
         public Category? Category { get; set; }
 
         [Display(Name = "Date Created")]
