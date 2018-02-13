@@ -10,7 +10,7 @@ namespace CreativeCravings.Models
     {
         public int ID { get; set; }
 
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Ingredient name must be betwee 2-100 characters")]
+        [Required, StringLength(100, MinimumLength = 2, ErrorMessage = "Ingredient name must be betwee 2-100 characters")]
         public string Name { get; set; }
 
         public virtual ICollection<RecipeIngredientXref> RecipeIngredientXrefs { get; set; }

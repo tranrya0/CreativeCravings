@@ -14,7 +14,7 @@ namespace CreativeCravings.Models
         public int RecipeID { get; set; }
         public int IngredientID { get; set; }
 
-        [StringLength(50, MinimumLength = 1, ErrorMessage = "Ingredient quantity type must not exceed 50 characters")]
+        [Required, StringLength(50, MinimumLength = 1, ErrorMessage = "Ingredient quantity type must not exceed 50 characters")]
         public string QuantityType { get; set; }
         public float Quantity { get; set; }
         public virtual Recipe Recipe { get; set; }
