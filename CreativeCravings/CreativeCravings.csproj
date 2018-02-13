@@ -217,6 +217,10 @@
     <Compile Include="Migrations\201801280234532_AddedDescToRecipes.Designer.cs">
       <DependentUpon>201801280234532_AddedDescToRecipes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802132049044_AddModelValidations.cs" />
+    <Compile Include="Migrations\201802132049044_AddModelValidations.Designer.cs">
+      <DependentUpon>201802132049044_AddModelValidations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -314,6 +318,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801280234532_AddedDescToRecipes.resx">
       <DependentUpon>201801280234532_AddedDescToRecipes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132049044_AddModelValidations.resx">
+      <DependentUpon>201802132049044_AddModelValidations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
