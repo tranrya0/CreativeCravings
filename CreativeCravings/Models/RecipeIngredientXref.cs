@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -10,9 +11,12 @@ namespace CreativeCravings.Models
     public class RecipeIngredientXref
     {
 
-        public int ID { get; set; }
-
+        [Key]
+        [Column(Order = 1)]
         public int RecipeID { get; set; }
+
+        [Key]
+        [Column(Order = 2)]
         public int IngredientID { get; set; }
 
         [Required, StringLength(50, MinimumLength = 1, ErrorMessage = "Ingredient quantity type must not exceed 50 characters")]

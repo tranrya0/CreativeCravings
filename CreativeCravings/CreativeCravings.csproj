@@ -229,6 +229,10 @@
     <Compile Include="Migrations\201802132146566_addRequirementToStringNames.Designer.cs">
       <DependentUpon>201802132146566_addRequirementToStringNames.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802132226333_setRecipeXrefCompositeKey.cs" />
+    <Compile Include="Migrations\201802132226333_setRecipeXrefCompositeKey.Designer.cs">
+      <DependentUpon>201802132226333_setRecipeXrefCompositeKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -335,6 +339,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802132146566_addRequirementToStringNames.resx">
       <DependentUpon>201802132146566_addRequirementToStringNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132226333_setRecipeXrefCompositeKey.resx">
+      <DependentUpon>201802132226333_setRecipeXrefCompositeKey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
