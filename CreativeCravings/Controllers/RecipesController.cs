@@ -10,6 +10,8 @@ using CreativeCravings.DAL;
 using CreativeCravings.Models;
 using PagedList;
 using System.Data.Entity.Infrastructure;
+using CreativeCravings.ViewModels;
+using System.Diagnostics;
 
 namespace CreativeCravings.Controllers
 {
@@ -133,7 +135,13 @@ namespace CreativeCravings.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Recipe recipe = db.Recipes.Find(id);
+            //Recipe recipe = db.Recipes.Find(id);
+            Recipe recipe = db.Recipes
+                .Include(i => i.RecipeIngredientXrefs)
+                .Where(i => i.ID == id)
+                .Single();
+            PopulateAssignedIngredientsData(recipe);
+
             if (recipe == null)
             {
                 return HttpNotFound();
@@ -141,27 +149,48 @@ namespace CreativeCravings.Controllers
             return View(recipe);
         }
 
+        private void PopulateAssignedIngredientsData(Recipe recipe) {
+
+            var allIngredients = db.Ingredients;
+            var recipeIngredients = new HashSet<int>(recipe.RecipeIngredientXrefs.Select(c => c.IngredientID));
+            var viewModel = new List<AssignedIngredientData>();
+            foreach (var ingredient in allIngredients) {
+                viewModel.Add(new AssignedIngredientData {
+                    IngredientID = ingredient.ID,
+                    Title = ingredient.Name,
+                    Assigned = recipeIngredients.Contains(ingredient.ID)
+                });
+            }
+            ViewBag.Ingredients = viewModel;
+        }
+
         // POST: Recipes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditRecipe(int? id)
+        public ActionResult EditRecipe(int? id, string[] selectedIngredients)
         {
             if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Recipe recipeToUpdate = db.Recipes.Find(id);
+            //Recipe recipeToUpdate = db.Recipes.Find(id);
+            Recipe recipeToUpdate = db.Recipes
+                .Include(i => i.RecipeIngredientXrefs)
+                .Where(i => i.ID == id)
+                .Single();
 
-            if(TryUpdateModel(recipeToUpdate, "",
+            if (TryUpdateModel(recipeToUpdate, "",
                 new string[] { "Name", "Category"}))
             {
                 try
                 {
                     recipeToUpdate.DateUpdated = System.DateTime.Now;
                     db.Entry(recipeToUpdate).State = EntityState.Modified;
+
+                    UpdateRecipeIngredients(selectedIngredients, recipeToUpdate);
 
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -172,8 +201,46 @@ namespace CreativeCravings.Controllers
                     ModelState.AddModelError("", dex.Message);
                 }
             }
-
+            PopulateAssignedIngredientsData(recipeToUpdate);
             return View(recipeToUpdate);
+        }
+
+        private void UpdateRecipeIngredients(string[] selectedIngredients, Recipe recipeToUpdate) {
+
+            if (selectedIngredients == null) {
+                recipeToUpdate.RecipeIngredientXrefs = new List<RecipeIngredientXref>();
+                return;
+            }
+            var selectedIngredientsHS = new HashSet<string>(selectedIngredients);
+
+            var recipeIngredients = new HashSet<int>
+                (recipeToUpdate.RecipeIngredientXrefs.Select(c => c.IngredientID));
+
+            foreach (var ingredient in db.Ingredients) {
+                if (selectedIngredientsHS.Contains(ingredient.ID.ToString())) {
+                    if (!recipeIngredients.Contains(ingredient.ID)) {
+                        recipeToUpdate.RecipeIngredientXrefs.Add(new RecipeIngredientXref {
+                            RecipeID = recipeToUpdate.ID,
+                            IngredientID = ingredient.ID,
+                            QuantityType = "Default",
+                            Recipe = recipeToUpdate,
+                            Ingredient = ingredient
+                        });
+                    }
+                } else {
+                    RecipeIngredientXref toberemoved = null;
+                    foreach (var i in recipeToUpdate.RecipeIngredientXrefs) {
+                        if (i.IngredientID == ingredient.ID) {
+                            toberemoved = i;
+                            Debug.Print(toberemoved.Ingredient.Name);
+                        }
+                    }
+                    if (toberemoved != null) {
+                        recipeToUpdate.RecipeIngredientXrefs.Remove(toberemoved);
+                    }
+                    
+                }
+            }
         }
 
         // GET: Recipes/Delete/5

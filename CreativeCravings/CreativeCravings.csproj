@@ -243,6 +243,7 @@
     <Compile Include="Models\RecipeIngredientXref.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AssignedIngredientData.cs" />
     <Compile Include="ViewModels\RecipeCategoryGroup.cs" />
   </ItemGroup>
   <ItemGroup>

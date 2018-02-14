@@ -33,6 +33,8 @@
         <th>
             Date Updated
         </th>
+
+        <th>Ingredients</th>
         <th></th>
     </tr>
 
@@ -50,6 +52,14 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateUpdated)
+            </td>
+
+            <td>
+                @{
+                    foreach (var ingredient in item.RecipeIngredientXrefs) {
+                        @ingredient.IngredientID @:  @ingredient.Ingredient.Name <br />
+        }
+                }
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
