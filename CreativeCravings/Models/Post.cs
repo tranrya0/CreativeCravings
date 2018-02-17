@@ -17,6 +17,7 @@ namespace CreativeCravings.Models
 
         [Required]
         [StringLength(1000, MinimumLength = 2, ErrorMessage = "Body must be betwee 2-1000 characters")]
+        [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
         [Display(Name = "Date Created")]
