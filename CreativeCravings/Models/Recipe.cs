@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CreativeCravings.Models
 {
@@ -17,6 +18,7 @@ namespace CreativeCravings.Models
         public int ID { get; set; }
 
         // user id
+        //[ForeignKey("ApplicationUser")]
         public string ChefId { get; set; }
 
         [Required, StringLength(200, MinimumLength = 2, ErrorMessage = "Recipe name must be betwee 2-200 characters")]
@@ -35,6 +37,8 @@ namespace CreativeCravings.Models
         public string Description { get; set; }
 
         public virtual ICollection<RecipeIngredientXref> RecipeIngredientXrefs { get; set; }
+
+        //public virtual ApplicationUser ApplicationUser { get; set; }
 
         
     }
