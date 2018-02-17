@@ -94,6 +94,35 @@ namespace CreativeCravings
                     var result = userManager.AddToRole(user.Id, "Admin");
                 }
             }
+
+            // add moderator
+            addNewUser(context, "moderator@gmail.com", "password1", "Moderator", userManager, roleManager);
+            addNewUser(context, "mod@gmail.com", "1234qwer", "Moderator", userManager, roleManager);
+            addNewUser(context, "normal@gmail.com", "normal", "", userManager, roleManager);
+
         }
+
+        private void addNewUser(ApplicationDbContext context,
+            string email, string password, string role,
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+
+            ApplicationUser user = userManager.FindByName(email);
+            if (user == null)
+            {
+                user = new ApplicationUser()
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true
+                };
+                IdentityResult userResult = userManager.Create(user, password);
+                if (userResult.Succeeded && role != "")
+                {
+                    var result = userManager.AddToRole(user.Id, role);
+                }
+            }
+        }
+            
     }
 }
