@@ -12,6 +12,8 @@ using PagedList;
 using System.Data.Entity.Infrastructure;
 using CreativeCravings.ViewModels;
 using System.Diagnostics;
+using Microsoft.AspNet.Identity;
+
 
 namespace CreativeCravings.Controllers
 {
@@ -106,13 +108,17 @@ namespace CreativeCravings.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "Name,Category")] Recipe recipe)
         {
             recipe.DateCreated = System.DateTime.Now;
             try
             {
-                if (ModelState.IsValid)
+                if (ModelState.IsValid && User.Identity.IsAuthenticated)
                 {
+                    // get id of current user and add it to the recipe
+                    var userId = User.Identity.GetUserId();
+                    recipe.ChefId = userId;
                     db.Recipes.Add(recipe);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -129,6 +135,7 @@ namespace CreativeCravings.Controllers
         }
 
         // GET: Recipes/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -169,6 +176,7 @@ namespace CreativeCravings.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult EditRecipe(int? id, string[] selectedIngredients, string[] quantity, string[] quantityType)
         {
             if(id == null)
@@ -271,6 +279,7 @@ namespace CreativeCravings.Controllers
         }
 
         // GET: Recipes/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id, bool? saveChangesError=false)
         {
             if (id == null)
@@ -295,6 +304,7 @@ namespace CreativeCravings.Controllers
         // POST: Recipes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             try

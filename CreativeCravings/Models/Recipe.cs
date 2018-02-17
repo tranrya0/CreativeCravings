@@ -16,6 +16,9 @@ namespace CreativeCravings.Models
 
         public int ID { get; set; }
 
+        // user id
+        public string ChefId { get; set; }
+
         [Required, StringLength(200, MinimumLength = 2, ErrorMessage = "Recipe name must be betwee 2-200 characters")]
         public string Name { get; set; }
 
