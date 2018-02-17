@@ -100,6 +100,7 @@ namespace CreativeCravings.Controllers
         // GET: Recipes/Create
         public ActionResult Create()
         {
+            PopulateAllIngredientsData();
             return View();
         }
 
@@ -109,7 +110,7 @@ namespace CreativeCravings.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "Name,Category")] Recipe recipe)
+        public ActionResult Create([Bind(Include = "Name,Category")] Recipe recipe, string[] selectedIngredients, string[] quantity, string[] quantityType)
         {
             recipe.DateCreated = System.DateTime.Now;
             try
@@ -120,6 +121,11 @@ namespace CreativeCravings.Controllers
                     var userId = User.Identity.GetUserId();
                     recipe.ChefId = userId;
                     db.Recipes.Add(recipe);
+
+                    db.SaveChanges();
+
+                    CreateRecipeIngredients(selectedIngredients, recipe, quantity, quantityType);
+           
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -129,7 +135,6 @@ namespace CreativeCravings.Controllers
                 // log error here
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
-
 
             return View(recipe);
         }
@@ -154,6 +159,20 @@ namespace CreativeCravings.Controllers
                 return HttpNotFound();
             }
             return View(recipe);
+        }
+
+        private void PopulateAllIngredientsData() {
+
+            var allIngredients = db.Ingredients;
+            var viewModel = new List<AssignedIngredientData>();
+            foreach (var ingredient in allIngredients) {
+                viewModel.Add(new AssignedIngredientData {
+                    IngredientID = ingredient.ID,
+                    Title = ingredient.Name,
+                    Assigned = false
+                });
+            }
+            ViewBag.Ingredients = viewModel;
         }
 
         private void PopulateAssignedIngredientsData(Recipe recipe) {
@@ -184,13 +203,13 @@ namespace CreativeCravings.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            if (quantity == null) {
-                Debug.Print("Quanity is null");
-            } else {
-                foreach (var q in quantity) {
-                    Debug.Print(q);
-                }
-            }
+            //if (quantity == null) {
+            //    Debug.Print("Quanity is null");
+            //} else {
+            //    foreach (var q in quantity) {
+            //        Debug.Print(q);
+            //    }
+            //}
 
             //Recipe recipeToUpdate = db.Recipes.Find(id);
             Recipe recipeToUpdate = db.Recipes
@@ -221,6 +240,49 @@ namespace CreativeCravings.Controllers
             return View(recipeToUpdate);
         }
 
+        private void CreateRecipeIngredients(string[] selectedIngredients, Recipe recipeToUpdate, string[] quantity, string[] quantityType) {
+            if (selectedIngredients == null) {
+                recipeToUpdate.RecipeIngredientXrefs = new List<RecipeIngredientXref>();
+                return;
+            }
+
+            //Debug.Print("############ Recipe im adding ingredients to " + recipeToUpdate.ID.ToString() + recipeToUpdate.Name);
+            var selectedIngredientsHS = new HashSet<string>(selectedIngredients);
+
+            foreach (var ingredient in db.Ingredients) {
+                if (selectedIngredientsHS.Contains(ingredient.ID.ToString())) {
+
+                        int recipeNum = 0;
+                        for (var i = 0; i < selectedIngredients.Length; i++) {
+                            if (ingredient.ID.ToString().Equals(selectedIngredients[i])) {
+                                //Debug.Print("#### Selected ingredient " + selectedIngredients[i]);
+                                recipeNum = Int32.Parse(selectedIngredients[i]);
+                            }
+                        }
+
+                        float quan = 0.0f;
+                        try {
+                            quan = float.Parse(quantity[recipeNum - 1], System.Globalization.CultureInfo.InvariantCulture);
+                        } catch (Exception e) {
+                            Debug.Print("### exception " + quan.ToString());
+                        }
+                        //Debug.Print("#### qunityty " + quantity[recipeNum - 1]);
+                        //Debug.Print("###### quan " + quan.ToString());
+                        //Debug.Print("#### qunitytytype " + quantityType[recipeNum - 1]);
+
+                        recipeToUpdate.RecipeIngredientXrefs = new List<RecipeIngredientXref>();
+                        recipeToUpdate.RecipeIngredientXrefs.Add(new RecipeIngredientXref {
+                            RecipeID = recipeToUpdate.ID,
+                            IngredientID = ingredient.ID,
+                            Quantity = quan,
+                            QuantityType = quantityType[recipeNum - 1],
+                            Recipe = recipeToUpdate,
+                            Ingredient = ingredient
+                        });
+                } 
+            }
+        }
+
         private void UpdateRecipeIngredients(string[] selectedIngredients, Recipe recipeToUpdate, string[] quantity, string[] quantityType) {
 
             if (selectedIngredients == null) {
@@ -239,7 +301,7 @@ namespace CreativeCravings.Controllers
                         int recipeNum = 0;
                         for (var i = 0; i < selectedIngredients.Length; i++) {
                             if (ingredient.ID.ToString().Equals(selectedIngredients[i])) {
-                            //Debug.Print("#### Selected ingredient " + selectedIngredients[i]);
+                            Debug.Print("#### Selected ingredient " + selectedIngredients[i]);
                                 recipeNum = Int32.Parse(selectedIngredients[i]);
                             }
                         }
@@ -248,10 +310,10 @@ namespace CreativeCravings.Controllers
                         try {
                             quan = float.Parse(quantity[recipeNum - 1], System.Globalization.CultureInfo.InvariantCulture);
                         } catch (Exception e) {
-                            //Debug.Print("### exception " + quan.ToString());
+                            Debug.Print("### exception " + quan.ToString());
                         }
-                        //Debug.Print("#### qunityty" + quantity[recipeNum - 1]);
-                        //Debug.Print("#### qunitytytype" + quantityType[recipeNum - 1]);
+                        Debug.Print("#### qunityty" + quantity[recipeNum - 1]);
+                        Debug.Print("#### qunitytytype" + quantityType[recipeNum - 1]);
 
                         recipeToUpdate.RecipeIngredientXrefs.Add(new RecipeIngredientXref {
                             RecipeID = recipeToUpdate.ID,
