@@ -129,6 +129,7 @@ namespace CreativeCravings.Controllers
         }
 
         // GET: Recipes/Edit/5
+        [Authorize(Roles ="Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)

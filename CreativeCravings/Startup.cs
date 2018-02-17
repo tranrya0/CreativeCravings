@@ -11,15 +11,17 @@ namespace CreativeCravings
     {
         public void Configuration(IAppBuilder app)
         {
+            ApplicationDbContext context = new ApplicationDbContext();
             ConfigureAuth(app);
-            createUserRoles();
+            createUserRoles(context);
+            seedUsers(context);
         }
 
         // create user roles on startup if they do not already exist
         // code originally from https://code.msdn.microsoft.com/ASPNET-MVC-5-Security-And-44cbdb97
-        private void createUserRoles()
+        private void createUserRoles(ApplicationDbContext context)
         {
-            ApplicationDbContext context = new ApplicationDbContext();
+            
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
@@ -61,9 +63,36 @@ namespace CreativeCravings
             if (!roleManager.RoleExists("Moderator"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Manager";
+                role.Name = "Moderator";
                 roleManager.Create(role);
 
+            }
+        }
+
+        // seed users with roles
+        private void seedUsers(ApplicationDbContext context)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
+            // create admin user
+            string userName = "admin@gmail.com";
+            string password = "adminpassword";
+
+            ApplicationUser user = userManager.FindByName(userName);
+            if (user == null)
+            {
+                user = new ApplicationUser()
+                {
+                    UserName = userName,
+                    Email = userName,
+                    EmailConfirmed = true
+                };
+                IdentityResult userResult = userManager.Create(user, password);
+                if (userResult.Succeeded)
+                {
+                    var result = userManager.AddToRole(user.Id, "Admin");
+                }
             }
         }
     }
