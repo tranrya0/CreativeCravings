@@ -238,6 +238,10 @@
     <Compile Include="Migrations\201802170344173_addedUserRoles.Designer.cs">
       <DependentUpon>201802170344173_addedUserRoles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802170710035_changedRecipeChefIdToString.cs" />
+    <Compile Include="Migrations\201802170710035_changedRecipeChefIdToString.Designer.cs">
+      <DependentUpon>201802170710035_changedRecipeChefIdToString.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -356,6 +360,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802170344173_addedUserRoles.resx">
       <DependentUpon>201802170344173_addedUserRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802170710035_changedRecipeChefIdToString.resx">
+      <DependentUpon>201802170710035_changedRecipeChefIdToString.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

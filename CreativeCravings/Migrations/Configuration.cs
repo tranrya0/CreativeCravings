@@ -1,6 +1,8 @@
 namespace CreativeCravings.Migrations
 {
     using CreativeCravings.Models;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
@@ -16,22 +18,26 @@ namespace CreativeCravings.Migrations
 
         protected override void Seed(CreativeCravings.DAL.RecipeContext context)
         {
+            // get user
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            ApplicationUser user = userManager.FindByName("normal@gmail.com");
+
             var recipes = new List<Recipe>
             {
             new Recipe{Name="Apple Pie",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
-                Description="A pie with apple filling"},
+                Description="A pie with apple filling", ChefId=user.Id},
             new Recipe{Name="Steak and Cheesy Mashed Potatoes",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
-                Description="Steak with a side of cheesey mashed potatoes"},
+                Description="Steak with a side of cheesey mashed potatoes", ChefId=user.Id},
             new Recipe{Name="Roasted Chicken and Rosemary Vegetables",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
-                Description="Roasted chicken, topped with garlic, pepper, rosemary, and a side of vegetables"},
+                Description="Roasted chicken, topped with garlic, pepper, rosemary, and a side of vegetables", ChefId=user.Id},
             new Recipe{Name="Gyro",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
-                Description="Classic Gyro, filled with pork or chicken, tomatom, onions, and tzatziki sauce"},
+                Description="Classic Gyro, filled with pork or chicken, tomatom, onions, and tzatziki sauce", ChefId=user.Id},
             new Recipe{Name="Baked Yams",Category=Category.Dessert, DateCreated=System.DateTime.Now,
-                Description="Baked Yams, topped with sour cream. Can substitute sweet potatoes"},
+                Description="Baked Yams, topped with sour cream. Can substitute sweet potatoes", ChefId=user.Id},
             new Recipe{Name="Baked Alaska",Category=Category.Dessert, DateCreated=System.DateTime.Now,
-                Description="Dessert consisting of ice cream and cake, topped with browned meringue"},
-            new Recipe{Name="Chicken Noodle Soup",Category=Category.Lunch, DateCreated=System.DateTime.Now},
-            new Recipe{Name="Garlic Bread",Category=Category.Lunch, DateCreated=System.DateTime.Now}
+                Description="Dessert consisting of ice cream and cake, topped with browned meringue", ChefId=user.Id},
+            new Recipe{Name="Chicken Noodle Soup",Category=Category.Lunch, DateCreated=System.DateTime.Now, ChefId=user.Id},
+            new Recipe{Name="Garlic Bread",Category=Category.Lunch, DateCreated=System.DateTime.Now, ChefId=user.Id}
             };
             recipes.ForEach(s => context.Recipes.AddOrUpdate(p => p.Name, s));
             context.SaveChanges();
