@@ -246,8 +246,10 @@ namespace CreativeCravings.Controllers
                 return;
             }
 
+
             //Debug.Print("############ Recipe im adding ingredients to " + recipeToUpdate.ID.ToString() + recipeToUpdate.Name);
             var selectedIngredientsHS = new HashSet<string>(selectedIngredients);
+            recipeToUpdate.RecipeIngredientXrefs = new List<RecipeIngredientXref>();
 
             foreach (var ingredient in db.Ingredients) {
                 if (selectedIngredientsHS.Contains(ingredient.ID.ToString())) {
@@ -266,11 +268,11 @@ namespace CreativeCravings.Controllers
                         } catch (Exception e) {
                             Debug.Print("### exception " + quan.ToString());
                         }
-                        //Debug.Print("#### qunityty " + quantity[recipeNum - 1]);
-                        //Debug.Print("###### quan " + quan.ToString());
-                        //Debug.Print("#### qunitytytype " + quantityType[recipeNum - 1]);
-
-                        recipeToUpdate.RecipeIngredientXrefs = new List<RecipeIngredientXref>();
+                        //Debug.Print("#### recipeId " + recipeToUpdate.ID.ToString());
+                        //Debug.Print("#### ingredientId " + ingredient.ID.ToString());
+                        //Debug.Print("#### quantity " + quan.ToString());
+                        //Debug.Print("#### quntityType " + quantityType[recipeNum - 1] + "\n");
+                        
                         recipeToUpdate.RecipeIngredientXrefs.Add(new RecipeIngredientXref {
                             RecipeID = recipeToUpdate.ID,
                             IngredientID = ingredient.ID,
@@ -281,6 +283,8 @@ namespace CreativeCravings.Controllers
                         });
                 } 
             }
+
+
         }
 
         private void UpdateRecipeIngredients(string[] selectedIngredients, Recipe recipeToUpdate, string[] quantity, string[] quantityType) {
