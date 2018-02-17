@@ -169,11 +169,19 @@ namespace CreativeCravings.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditRecipe(int? id, string[] selectedIngredients)
+        public ActionResult EditRecipe(int? id, string[] selectedIngredients, string[] quantity, string[] quantityType)
         {
             if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (quantity == null) {
+                Debug.Print("Quanity is null");
+            } else {
+                foreach (var q in quantity) {
+                    Debug.Print(q);
+                }
             }
 
             //Recipe recipeToUpdate = db.Recipes.Find(id);
@@ -190,7 +198,7 @@ namespace CreativeCravings.Controllers
                     recipeToUpdate.DateUpdated = System.DateTime.Now;
                     db.Entry(recipeToUpdate).State = EntityState.Modified;
 
-                    UpdateRecipeIngredients(selectedIngredients, recipeToUpdate);
+                    UpdateRecipeIngredients(selectedIngredients, recipeToUpdate, quantity, quantityType);
 
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -205,7 +213,7 @@ namespace CreativeCravings.Controllers
             return View(recipeToUpdate);
         }
 
-        private void UpdateRecipeIngredients(string[] selectedIngredients, Recipe recipeToUpdate) {
+        private void UpdateRecipeIngredients(string[] selectedIngredients, Recipe recipeToUpdate, string[] quantity, string[] quantityType) {
 
             if (selectedIngredients == null) {
                 recipeToUpdate.RecipeIngredientXrefs = new List<RecipeIngredientXref>();
@@ -217,12 +225,31 @@ namespace CreativeCravings.Controllers
                 (recipeToUpdate.RecipeIngredientXrefs.Select(c => c.IngredientID));
 
             foreach (var ingredient in db.Ingredients) {
-                if (selectedIngredientsHS.Contains(ingredient.ID.ToString())) {
+                    if (selectedIngredientsHS.Contains(ingredient.ID.ToString())) {
                     if (!recipeIngredients.Contains(ingredient.ID)) {
+
+                        int recipeNum = 0;
+                        for (var i = 0; i < selectedIngredients.Length; i++) {
+                            if (ingredient.ID.ToString().Equals(selectedIngredients[i])) {
+                            //Debug.Print("#### Selected ingredient " + selectedIngredients[i]);
+                                recipeNum = Int32.Parse(selectedIngredients[i]);
+                            }
+                        }
+
+                        float quan = 0.0f;
+                        try {
+                            quan = float.Parse(quantity[recipeNum - 1], System.Globalization.CultureInfo.InvariantCulture);
+                        } catch (Exception e) {
+                            //Debug.Print("### exception " + quan.ToString());
+                        }
+                        //Debug.Print("#### qunityty" + quantity[recipeNum - 1]);
+                        //Debug.Print("#### qunitytytype" + quantityType[recipeNum - 1]);
+
                         recipeToUpdate.RecipeIngredientXrefs.Add(new RecipeIngredientXref {
                             RecipeID = recipeToUpdate.ID,
                             IngredientID = ingredient.ID,
-                            QuantityType = "Default",
+                            Quantity = quan,
+                            QuantityType = quantityType[recipeNum - 1],
                             Recipe = recipeToUpdate,
                             Ingredient = ingredient
                         });
@@ -232,7 +259,7 @@ namespace CreativeCravings.Controllers
                     foreach (var i in recipeToUpdate.RecipeIngredientXrefs) {
                         if (i.IngredientID == ingredient.ID) {
                             toberemoved = i;
-                            Debug.Print(toberemoved.Ingredient.Name);
+                            //Debug.Print(toberemoved.Ingredient.Name);
                         }
                     }
                     if (toberemoved != null) {

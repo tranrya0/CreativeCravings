@@ -35,21 +35,31 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <table>
-                    <tr>
                         @{
                             int cnt = 0;
                             List<CreativeCravings.ViewModels.AssignedIngredientData> ingredients = ViewBag.Ingredients;
+        @:<tr>
+                    <td><h5>Ingredient&nbsp;</h5></td>
+                    <td><h5>Quantity</h5></td>
+                    <td><h5>Quantity Type</h5></td>
+        @:</tr>
 
         foreach (var ingredient in ingredients) {
-            if (cnt++ % 3 == 0) {
-                @:</tr><tr>
-            }
+                    @:<tr>
                     @:<td>
                         <input type="checkbox"
                                name="selectedIngredients"
                                value="@ingredient.IngredientID"
                                @(Html.Raw(ingredient.Assigned ? "checked=\"checked\"" : "")) />
                                 @ingredient.IngredientID @:  @ingredient.Title
+                            @:</td>
+
+                            @:<td>
+                                <input type="text" name="quantity"/>
+                            @:</td>
+
+                            @:<td>
+                                  <input type="text" name="quantityType" />
                             @:</td>
                         }
                         @:</tr>
