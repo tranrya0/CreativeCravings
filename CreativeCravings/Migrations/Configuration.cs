@@ -21,7 +21,21 @@ namespace CreativeCravings.Migrations
             // get user
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
             ApplicationUser user = userManager.FindByName("normal@gmail.com");
+            ApplicationUser adminUser = userManager.FindByName("admin@gmail.com");
 
+            // add posts
+            var posts = new List<Post>
+            {
+                new Post{Title="Start of the website", Body="This is the start of our website!", AuthorID=adminUser.Id },
+                new Post{Title="Adding Recipes", Body="Added some basic recipes!", AuthorID=adminUser.Id },
+                new Post{Title="Ingredients Update!", Body="Added some ingredients to the website as well!", AuthorID=adminUser.Id },
+                new Post{Title="Fixes", Body="Fixed some bugs so ingredients for new recipes should now update properly!", AuthorID=adminUser.Id }
+            };
+
+            posts.ForEach(s => context.Posts.AddOrUpdate(p => p.Title, s));
+            context.SaveChanges();
+
+            // add recipes
             var recipes = new List<Recipe>
             {
             new Recipe{Name="Apple Pie",Category=Category.Breakfast, DateCreated=System.DateTime.Now,
