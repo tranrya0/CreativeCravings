@@ -16,4 +16,8 @@ Dmitriy added connection resiliency and command interception as well as the firs
 - Added authorization for recipes and posts
 - Scaffolded model, controller, views for posts
 
+### Dmitriy Bliznyuk
+- Displayed extra Recipe/ Ingredients information through ViewBags
+- Added checkboxes and input boxes for individual ingredients
+- Implemented Create/Edit Recipe to save Recipe and Ingredients info in the DB
 
