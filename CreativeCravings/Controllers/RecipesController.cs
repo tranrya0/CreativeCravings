@@ -98,6 +98,7 @@ namespace CreativeCravings.Controllers
         }
 
         // GET: Recipes/Create
+        [Authorize]
         public ActionResult Create()
         {
             PopulateAllIngredientsData();
@@ -379,7 +380,7 @@ namespace CreativeCravings.Controllers
         }
 
         // GET: Recipes/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Delete(int? id, bool? saveChangesError=false)
         {
             if (id == null)
@@ -404,7 +405,7 @@ namespace CreativeCravings.Controllers
         // POST: Recipes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult DeleteConfirmed(int id)
         {
             try
