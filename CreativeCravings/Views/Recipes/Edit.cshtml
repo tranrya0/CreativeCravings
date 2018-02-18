@@ -38,13 +38,17 @@
                         @{
                             int cnt = 0;
                             List<CreativeCravings.ViewModels.AssignedIngredientData> ingredients = ViewBag.Ingredients;
+                            List<string> quantities = ViewBag.Quantities;
+                            List<string> quanTypes = ViewBag.QuanTypes;
         @:<tr>
                     <td><h5>Ingredient&nbsp;</h5></td>
                     <td><h5>Quantity</h5></td>
                     <td><h5>Quantity Type</h5></td>
         @:</tr>
 
-        foreach (var ingredient in ingredients) {
+                            //foreach (var ingredient in ingredients) {
+                            for (int i = 0; i < ingredients.Count; i++) {
+                                var ingredient = ingredients.ElementAt(i);
                     @:<tr>
                     @:<td>
                         <input type="checkbox"
@@ -55,11 +59,11 @@
                             @:</td>
 
                             @:<td>
-                                <input type="text" name="quantity"/>
+                                <input type="text" name="quantity" value="@quantities.ElementAt(i)" />
                             @:</td>
 
                             @:<td>
-                                  <input type="text" name="quantityType" />
+                                  <input type="text" name="quantityType" value="@quanTypes.ElementAt(i)" />
                             @:</td>
                         }
                         @:</tr>

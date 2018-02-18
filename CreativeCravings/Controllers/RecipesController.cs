@@ -180,13 +180,48 @@ namespace CreativeCravings.Controllers
             var allIngredients = db.Ingredients;
             var recipeIngredients = new HashSet<int>(recipe.RecipeIngredientXrefs.Select(c => c.IngredientID));
             var viewModel = new List<AssignedIngredientData>();
+
+            ICollection<RecipeIngredientXref> xrefs = recipe.RecipeIngredientXrefs;
+            var addedIngredients = new List<Ingredient>();
+            var addedQuantities = new List<string>();
+            var addedQuanTypes = new List<string>();
+
+            foreach (var xr in xrefs) {
+                addedIngredients.Add(xr.Ingredient);
+                addedQuantities.Add(xr.Quantity.ToString());
+                addedQuanTypes.Add(xr.QuantityType);
+            }
+
+            var viewModelQuantity = new List<string>();
+            var viewModelQuanType = new List<string>();
+
             foreach (var ingredient in allIngredients) {
                 viewModel.Add(new AssignedIngredientData {
                     IngredientID = ingredient.ID,
                     Title = ingredient.Name,
                     Assigned = recipeIngredients.Contains(ingredient.ID)
                 });
+
+                if (addedIngredients.Contains(ingredient)) {
+                    viewModelQuantity.Add(addedQuantities.ElementAt(addedIngredients.IndexOf(ingredient)));
+                    viewModelQuanType.Add(addedQuanTypes.ElementAt(addedIngredients.IndexOf(ingredient)));
+                } else {
+                    viewModelQuantity.Add("");
+                    viewModelQuanType.Add("");
+                }
             }
+
+            /*Debug.Print("quanitiesi");
+            foreach (var i in viewModelQuantity) {
+                Debug.Print(i);
+            }
+            Debug.Print("quantypes");
+            foreach (var i in viewModelQuanType) {
+                Debug.Print(i);
+            }*/
+
+            ViewBag.Quantities = viewModelQuantity;
+            ViewBag.QuanTypes = viewModelQuanType;
             ViewBag.Ingredients = viewModel;
         }
 
@@ -202,14 +237,6 @@ namespace CreativeCravings.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            //if (quantity == null) {
-            //    Debug.Print("Quanity is null");
-            //} else {
-            //    foreach (var q in quantity) {
-            //        Debug.Print(q);
-            //    }
-            //}
 
             //Recipe recipeToUpdate = db.Recipes.Find(id);
             Recipe recipeToUpdate = db.Recipes
@@ -245,7 +272,6 @@ namespace CreativeCravings.Controllers
                 recipeToUpdate.RecipeIngredientXrefs = new List<RecipeIngredientXref>();
                 return;
             }
-
 
             //Debug.Print("############ Recipe im adding ingredients to " + recipeToUpdate.ID.ToString() + recipeToUpdate.Name);
             var selectedIngredientsHS = new HashSet<string>(selectedIngredients);
@@ -283,8 +309,6 @@ namespace CreativeCravings.Controllers
                         });
                 } 
             }
-
-
         }
 
         private void UpdateRecipeIngredients(string[] selectedIngredients, Recipe recipeToUpdate, string[] quantity, string[] quantityType) {
