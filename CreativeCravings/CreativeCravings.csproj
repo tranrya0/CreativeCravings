@@ -247,6 +247,10 @@
     <Compile Include="Migrations\201802172156306_addPostModel.Designer.cs">
       <DependentUpon>201802172156306_addPostModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802180020366_addedUsersToPosts.cs" />
+    <Compile Include="Migrations\201802180020366_addedUsersToPosts.Designer.cs">
+      <DependentUpon>201802180020366_addedUsersToPosts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -377,6 +381,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802172156306_addPostModel.resx">
       <DependentUpon>201802172156306_addPostModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802180020366_addedUsersToPosts.resx">
+      <DependentUpon>201802180020366_addedUsersToPosts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

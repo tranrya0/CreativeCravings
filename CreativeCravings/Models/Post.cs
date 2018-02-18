@@ -11,6 +11,9 @@ namespace CreativeCravings.Models
     {
         public int ID { get; set; }
 
+        // user id that made the post
+        public string AuthorID { get; set; }
+
         [Required]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Title must be betwee 2-100 characters")]
         public string Title { get; set; }

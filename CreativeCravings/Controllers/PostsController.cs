@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CreativeCravings.DAL;
 using CreativeCravings.Models;
+using Microsoft.AspNet.Identity;
 
 namespace CreativeCravings.Controllers
 {
@@ -49,10 +50,14 @@ namespace CreativeCravings.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Title,Body")] Post post)
+        public ActionResult Create([Bind(Include = "Title,Body,AuthorID")] Post post)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
+                // get id of current user and add it to the recipe
+                var userId = User.Identity.GetUserId();
+                post.AuthorID = userId;
+
                 post.DateCreated = System.DateTime.Now;
                 db.Posts.Add(post);
                 db.SaveChanges();
