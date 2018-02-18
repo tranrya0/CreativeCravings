@@ -323,8 +323,18 @@ namespace CreativeCravings.Controllers
                 (recipeToUpdate.RecipeIngredientXrefs.Select(c => c.IngredientID));
 
             foreach (var ingredient in db.Ingredients) {
-                    if (selectedIngredientsHS.Contains(ingredient.ID.ToString())) {
-                    if (!recipeIngredients.Contains(ingredient.ID)) {
+                if (selectedIngredientsHS.Contains(ingredient.ID.ToString())) {
+                    if (recipeIngredients.Contains(ingredient.ID)) {
+                        RecipeIngredientXref toberemoved = null;
+                        foreach (var i in recipeToUpdate.RecipeIngredientXrefs) {
+                            if (i.IngredientID == ingredient.ID) {
+                                toberemoved = i;
+                            }
+                        }
+                        if (toberemoved != null) {
+                            recipeToUpdate.RecipeIngredientXrefs.Remove(toberemoved);
+                        }
+                    }
 
                         int recipeNum = 0;
                         for (var i = 0; i < selectedIngredients.Length; i++) {
@@ -351,7 +361,7 @@ namespace CreativeCravings.Controllers
                             Recipe = recipeToUpdate,
                             Ingredient = ingredient
                         });
-                    }
+                    //}
                 } else {
                     RecipeIngredientXref toberemoved = null;
                     foreach (var i in recipeToUpdate.RecipeIngredientXrefs) {
