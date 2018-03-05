@@ -111,7 +111,7 @@ namespace CreativeCravings.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "Name,Category")] Recipe recipe, string[] selectedIngredients, string[] quantity, string[] quantityType)
+        public ActionResult Create([Bind(Include = "Name,Category,Description")] Recipe recipe, string[] selectedIngredients, string[] quantity, string[] quantityType)
         {
             recipe.DateCreated = System.DateTime.Now;
             try
@@ -246,7 +246,7 @@ namespace CreativeCravings.Controllers
                 .Single();
 
             if (TryUpdateModel(recipeToUpdate, "",
-                new string[] { "Name", "Category"}))
+                new string[] { "Name", "Category", "Description"}))
             {
                 try
                 {

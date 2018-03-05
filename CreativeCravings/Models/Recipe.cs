@@ -34,6 +34,7 @@ namespace CreativeCravings.Models
         public DateTime? DateUpdated { get; set; }
 
         [StringLength(250, ErrorMessage = "Recipe description must not exceed 250 characters")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
         public virtual ICollection<RecipeIngredientXref> RecipeIngredientXrefs { get; set; }
