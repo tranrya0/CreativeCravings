@@ -40,5 +40,9 @@ namespace CreativeCravings.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
+
+        public ActionResult Chat() {
+            return View();
+        }
     }
 }
