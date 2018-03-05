@@ -89,12 +89,12 @@ namespace CreativeCravings.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "Title,Body")] Post post)
+        public ActionResult Edit([Bind(Include = "ID,Title,Body")] Post post)
         {
-            post.DateUpdated = System.DateTime.Now;
+           
             if (ModelState.IsValid)
             {
-                
+                //post.DateUpdated = System.DateTime.Now;
                 db.Entry(post).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
