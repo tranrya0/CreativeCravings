@@ -15,19 +15,6 @@ namespace CreativeCravings.Tests.Controllers
     public class PostsControllerTest
     {
         [TestMethod]
-        public void Index_Returns_ActionResult()
-        {
-            // Arrange
-            PostsController controller = new PostsController();
-
-            // Act
-            ActionResult result = controller.Index() as ActionResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
         public void Index_Contains_ListOfPosts_Model()
         {
             // Arrange
