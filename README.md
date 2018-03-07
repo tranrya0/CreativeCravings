@@ -2,6 +2,24 @@
 T INFO 431 A group project for winter 2017
 This is a recipe website where users can view the ingredients and description of a recipe.
 
+## User Login Roles
+- **Admin**: 
+  - Username: admin@gmail.com
+  - Password: adminpassword
+- **Moderator**: 
+  - Username: moderator@gmail.com
+  - Password: password1
+- **Normal User**:
+  - Username: normal@gmail.com
+  - Password: normal
+  
+## Additional MVC Features
+Added SignalR Chat feature(in navigation link in navigation bar of website)
+
+## Misc Notes
+- Blueaccords and tranrya0 github accounts both belong to Ryan Tran(tranrya0 account was created specifically for this class)
+- dimabliz github account belongs to Dmitriy V Bliznyuk
+
 ## For WApp2:
 
 Ryan created the Data Models, implemented basic CRUD functionality, and added sorting, filtering, and paging. (Lab 1-3)
