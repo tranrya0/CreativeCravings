@@ -14,27 +14,29 @@ namespace CreativeCravings.Controllers
 {
     public class PostsController : Controller
     {
-        private RecipeContext db = new RecipeContext();
+        //private RecipeContext db = new RecipeContext();
 
-        // repo used so you can run with mock database or real database
-        private IPostRepository postRepo;
+        // generic repository, shares context with all other controllers
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
-        // constructor initialized with repositories
-        public PostsController(IPostRepository thePostRepo)
-        {
-            this.postRepo = thePostRepo;
-        }
 
         public PostsController()
         {
-            this.postRepo = new EFPostRepository();
+            this.unitOfWork = new UnitOfWork();
+        }
+
+        public PostsController(UnitOfWork uow)
+        {
+            this.unitOfWork = uow;
         }
 
         // GET: Posts
         // changed to view results so test works
         public ViewResult Index()
         {
-            return View(postRepo.Posts.ToList());
+            //return View(postRepo.Posts.ToList());
+            var posts = unitOfWork.PostRepository.Get();
+            return View(posts.ToList());
         }
 
         // GET: Posts/Details/5
@@ -44,7 +46,8 @@ namespace CreativeCravings.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Posts.Find(id);
+            //Post post = db.Posts.Find(id);
+            Post post = unitOfWork.PostRepository.GetByID(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -74,8 +77,10 @@ namespace CreativeCravings.Controllers
                 post.AuthorID = userId;
 
                 post.DateCreated = System.DateTime.Now;
-                db.Posts.Add(post);
-                db.SaveChanges();
+                //db.Posts.Add(post);
+                //db.SaveChanges();
+                unitOfWork.PostRepository.Insert(post);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -90,7 +95,8 @@ namespace CreativeCravings.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Posts.Find(id);
+            //Post post = db.Posts.Find(id);
+            Post post = unitOfWork.PostRepository.GetByID(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -110,8 +116,10 @@ namespace CreativeCravings.Controllers
             if (ModelState.IsValid)
             {
                 //post.DateUpdated = System.DateTime.Now;
-                db.Entry(post).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(post).State = EntityState.Modified;
+                //db.SaveChanges();
+                unitOfWork.PostRepository.Update(post);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             return View(post);
@@ -125,7 +133,8 @@ namespace CreativeCravings.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Posts.Find(id);
+            //Post post = db.Posts.Find(id);
+            Post post = unitOfWork.PostRepository.GetByID(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -139,9 +148,12 @@ namespace CreativeCravings.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Post post = db.Posts.Find(id);
-            db.Posts.Remove(post);
-            db.SaveChanges();
+            //Post post = db.Posts.Find(id);
+            //db.Posts.Remove(post);
+            //db.SaveChanges();
+            Post post = unitOfWork.PostRepository.GetByID(id);
+            unitOfWork.PostRepository.Delete(id);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }
 
@@ -149,7 +161,8 @@ namespace CreativeCravings.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
+                unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }

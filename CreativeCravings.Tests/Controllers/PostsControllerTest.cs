@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using CreativeCravings.Models;
 using Moq;
 using System.Linq;
+using CreativeCravings.DAL;
 
 namespace CreativeCravings.Tests.Controllers
 {
@@ -18,9 +19,9 @@ namespace CreativeCravings.Tests.Controllers
         public void Index_Contains_ListOfPosts_Model()
         {
             // Arrange
-            Mock<IPostRepository> postMock = new Mock<IPostRepository>();
+            Mock<UnitOfWork> postMock = new Mock<UnitOfWork>();
 
-            postMock.Setup(m => m.Posts).Returns(new Post[]
+            postMock.Setup(m => m.PostRepository.Items).Returns(new Post[]
             {
                 new Post {ID=1, Title="Test post 1",Body="This is the body for test 1", AuthorID="1"},
                 new Post {ID=2, Title="Test post 2",Body="This is the body for test 2", AuthorID="1"},
