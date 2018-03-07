@@ -16,10 +16,25 @@ namespace CreativeCravings.Controllers
     {
         private RecipeContext db = new RecipeContext();
 
-        // GET: Posts
-        public ActionResult Index()
+        // repo used so you can run with mock database or real database
+        private IPostRepository postRepo;
+
+        // constructor initialized with repositories
+        public PostsController(IPostRepository thePostRepo)
         {
-            return View(db.Posts.ToList());
+            this.postRepo = thePostRepo;
+        }
+
+        public PostsController()
+        {
+            this.postRepo = new EFPostRepository();
+        }
+
+        // GET: Posts
+        // changed to view results so test works
+        public ViewResult Index()
+        {
+            return View(postRepo.Posts.ToList());
         }
 
         // GET: Posts/Details/5
